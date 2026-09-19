@@ -1,0 +1,16 @@
+# Backend
+backend/.env
+backend/pollster
+backend/tmp/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Docker volumes
+mongo_data/
+redis_data/
+
+# OS
+.DS_Store
+Thumbs.db
