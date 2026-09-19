@@ -40,7 +40,7 @@ func main() {
 	}()
 
 	// ── Redis ─────────────────────────────────────────────────────────────────
-	rdb, err := repository.NewRedisClient(cfg.RedisAddr, cfg.RedisPassword)
+	rdb, err := repository.NewRedisClient(cfg.RedisURL, cfg.RedisAddr, cfg.RedisPassword)
 	if err != nil {
 		log.Fatalf("redis: %v", err)
 	}

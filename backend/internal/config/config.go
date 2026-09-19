@@ -13,6 +13,9 @@ type Config struct {
 	Port           string
 	MongoURI       string
 	MongoDB        string
+	// RedisURL is the full connection URL (e.g. rediss://... from Upstash).
+	// If set it takes priority over RedisAddr + RedisPassword.
+	RedisURL       string
 	RedisAddr      string
 	RedisPassword  string
 	JWTSecret      string
@@ -39,6 +42,7 @@ func Load() (*Config, error) {
 		Port:           getEnv("PORT", "8080"),
 		MongoURI:       getEnv("MONGODB_URI", "mongodb://localhost:27017"),
 		MongoDB:        getEnv("MONGODB_DB", "pollster"),
+		RedisURL:       getEnv("REDIS_URL", ""),
 		RedisAddr:      getEnv("REDIS_ADDR", "localhost:6379"),
 		RedisPassword:  getEnv("REDIS_PASSWORD", ""),
 		JWTSecret:      secret,

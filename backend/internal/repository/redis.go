@@ -8,14 +8,28 @@ import (
 )
 
 // NewRedisClient creates and verifies a Redis connection.
-func NewRedisClient(addr, password string) (*redis.Client, error) {
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     addr,
-		Password: password,
-		DB:       0,
-	})
+// It accepts either a full Redis URL (rediss://... or redis://...)
+// or separate addr + password values.
+func NewRedisClient(redisURL, addr, password string) (*redis.Client, error) {
+	var rdb *redis.Client
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	if redisURL != "" {
+		// Parse the full URL — used by Upstash and other managed Redis providers.
+		opt, err := redis.ParseURL(redisURL)
+		if err != nil {
+			return nil, err
+		}
+		rdb = redis.NewClient(opt)
+	} else {
+		// Fallback to addr + password — used for local Redis.
+		rdb = redis.NewClient(&redis.Options{
+			Addr:     addr,
+			Password: password,
+			DB:       0,
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	if err := rdb.Ping(ctx).Err(); err != nil {
