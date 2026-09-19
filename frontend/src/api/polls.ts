@@ -36,4 +36,9 @@ export const closePoll = (pollId: string) =>
   client.post(`/polls/${pollId}/close`).then(r => r.data)
 
 /** Returns the SSE stream URL for a poll (used with EventSource). */
-export const streamUrl = (pollId: string) => `/api/v1/polls/${pollId}/stream`
+export const streamUrl = (pollId: string) => {
+  const base = import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/api/v1`
+    : '/api/v1'
+  return `${base}/polls/${pollId}/stream`
+}
